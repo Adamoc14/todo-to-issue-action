@@ -3,7 +3,7 @@ description: 'Converts IDE TODO comments to GitHub issues'
 author: 'Alastair Mooney'
 runs:
   using: 'docker'
-  image: 'docker://ghcr.io/alstr/todo-to-issue-action:v4.10.1'
+  image: 'Dockerfile'
 branding:
   icon: 'check-square'
   color: 'orange'
@@ -41,11 +41,11 @@ inputs:
   CLOSE_ISSUES:
     description: 'Optional input that specifies whether to attempt to close an issue when a TODO is removed'
     required: false
-    default: true
+    default: "true"
   AUTO_P:
     description: 'For multiline TODOs, format each line as a new paragraph when creating the issue'
     required: false
-    default: true
+    default: "true"
   PROJECTS_SECRET:
     description: 'Encrypted secret corresponding to your personal access token (do not enter the actual secret)'
     required: false
@@ -61,7 +61,7 @@ inputs:
   AUTO_ASSIGN:
     description: 'Automatically assign new issues to the user who triggered the action'
     required: false
-    default: false
+    default: "false"
   ACTOR:
     description: 'The username of the person who triggered the action'
     required: false
@@ -72,7 +72,11 @@ inputs:
   IDENTIFIERS:
     description: 'Dictionary of custom identifiers'
     required: false
-  GITHUB_URL:
+  GITHUB_URL: 
+    description: 'Base url of github'
+    required: true
+    default: ${{ github.server_url }}
+  GITHUB_API_URL:
     description: 'Base url of GitHub API'
     required: false
     default: ${{ github.api_url }}

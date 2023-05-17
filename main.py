@@ -13,6 +13,8 @@ import itertools
 import operator
 
 
+print("well")
+
 class LineStatus(Enum):
     """Represents the status of a line in a diff file."""
     ADDED = 0
@@ -46,12 +48,14 @@ class GitHubClient(object):
 
     def __init__(self):
         self.github_url = os.getenv('INPUT_GITHUB_URL')
-        self.base_url = f'{self.github_url}/'
+        self.github_api_url = os.getenv('INPUT_GITHUB_API_URL')
+        self.base_url = f'{self.github_api_url}/'
         self.repos_url = f'{self.base_url}repos/'
         self.repo = os.getenv('INPUT_REPO')
         self.before = os.getenv('INPUT_BEFORE')
         self.sha = os.getenv('INPUT_SHA')
-        self.commits = json.loads(os.getenv('INPUT_COMMITS')) or []
+        input_commits = json.dumps(os.getenv('INPUT_COMMITS'))
+        self.commits = json.loads(input_commits) or []
         self.diff_url = os.getenv('INPUT_DIFF_URL')
         self.token = os.getenv('INPUT_TOKEN')
         self.issues_url = f'{self.repos_url}{self.repo}/issues'
@@ -116,7 +120,7 @@ class GitHubClient(object):
             # Title is too long.
             title = title[:80] + '...'
         formatted_issue_body = self.line_break.join(issue.body)
-        url_to_line = f'{self.base_url}{self.repo}/blob/{self.sha}/{issue.file_name}#L{issue.start_line}'
+        url_to_line = f'{self.github_url}{self.repo}/blob/{self.sha}/{issue.file_name}#L{issue.start_line}'
         snippet = '```' + issue.markdown_language + '\n' + issue.hunk + '\n' + '```'
 
         issue_template = os.getenv('INPUT_ISSUE_TEMPLATE', None)
@@ -645,6 +649,7 @@ class TodoParser(object):
 
 
 if __name__ == "__main__":
+    print("Hi")
     # Create a basic client for communicating with GitHub, automatically initialised with environment variables.
     client = GitHubClient()
     # Check to see if the workflow has been run manually.
